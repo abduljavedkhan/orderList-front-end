@@ -52,14 +52,13 @@ export const UpdateOrder = (route) => {
         };
         const res = await fetch(
           `https://rest-api-orderlist.herokuapp.com/api/orders/` +
-            currentOrderId,
+            selectedOrder.order_id,
           requestOptions
         );
         const dataR = await res.json();
         switch (res["status"]) {
           case 200:
             if (dataR) {
-
               history.push("/");
             }
             break;

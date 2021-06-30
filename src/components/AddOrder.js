@@ -70,6 +70,7 @@ export const AddOrder = () => {
               onChange={(e) => setCustId(e.target.value)}
               type="text"
               placeholder="Enter customerId"
+              required
             />
           </div>
           <div className="w-full mb-5">
@@ -85,6 +86,7 @@ export const AddOrder = () => {
               onChange={(e) => setStatus(e.target.value)}
               type="text"
               placeholder="Enter status"
+              required
             />
           </div>
           <div className="w-full mb-5">
@@ -98,8 +100,9 @@ export const AddOrder = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
-              type="text"
+              type="number"
               placeholder="Enter Quantity"
+              required
             />
           </div>
           <div className="w-full mb-5">
@@ -115,6 +118,7 @@ export const AddOrder = () => {
               onChange={(e) => setProductId(e.target.value)}
               type="text"
               placeholder="Enter ProductId"
+              required
             />
           </div>
           <div className="flex items-center justify-between">
