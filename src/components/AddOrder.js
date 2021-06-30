@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 export const AddOrder = () => {
   let history = useHistory();
 
-  const [customerId, setCustId] = useState("");
+  const [customerId, setCustId] = useState("54321");
   const [productId, setProductId] = useState("");
   const [status, setStatus] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -67,9 +67,8 @@ export const AddOrder = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:text-gray-600"
               value={customerId}
-              onChange={(e) => setCustId(e.target.value)}
               type="text"
-              placeholder="Enter customerId"
+             disabled="disabled"
               required
             />
           </div>
