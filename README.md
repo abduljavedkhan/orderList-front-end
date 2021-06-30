@@ -4,6 +4,11 @@
 npm install
 npm run start
 ```
+
+### Live Hosted URL:
+https://orderlist-frontend.herokuapp.com/
+
+
 screen shot:1
 
 ![image](https://user-images.githubusercontent.com/44355278/123951896-ea235900-d9c2-11eb-8e86-d40e96a8af7c.png)
