@@ -69,7 +69,6 @@ export const OrderList = () => {
   ];
 
   const OrderListAPI = async () => {
-    alert("reached");
     try {
       let myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -78,11 +77,9 @@ export const OrderList = () => {
         headers: myHeaders,
         redirect: "follow",
       };
-      const res = await fetch(`localhost:7070/api/orders`, requestOptions);
+      const res = await fetch(`https://rest-api-orderlist.herokuapp.com/api/orders`, requestOptions);
       const dataR = await res.json();
-      alert("data " + res);
-      console.log("Order List Res ", JSON.stringify(res));
-      switch (res) {
+      switch (res["status"]) {
         case 200:
           if (dataR) {
             console.log("Order List Res ", JSON.stringify(dataR));
@@ -111,7 +108,7 @@ export const OrderList = () => {
       >
         Show Data
       </button>
-      {orders && orders.length > 0 ? (
+      {orderListRes && orderListRes.length > 0 ? (
         <>
           {orders.map((order) => (
             <div
