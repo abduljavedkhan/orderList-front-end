@@ -11,4 +11,24 @@ screen shot:2
 
 Add order:
 
+use below details:
+```
+customerId: 54321
+status: processing
+ProductId:
+  anyone from below:
+T456789
+A224569
+A224568
+A224567
+B789456
+I456543
+P12456789
+P1456789
+H23456789
+S345678
+
+quantity: only numeric
+```
+
 ![image](https://user-images.githubusercontent.com/44355278/123952083-235bc900-d9c3-11eb-9a25-cfba1112a72e.png)
