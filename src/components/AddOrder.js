@@ -34,7 +34,7 @@ export const AddOrder = () => {
         switch (res["status"]) {
           case 200:
             if (dataR) {
-                alert("Success")
+              alert("Success");
               console.log("Add Order Res ", JSON.stringify(dataR));
               history.push("/");
             }
@@ -68,8 +68,7 @@ export const AddOrder = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:text-gray-600"
               value={customerId}
               type="text"
-             disabled="disabled"
-              required
+              disabled="disabled"
             />
           </div>
           <div className="w-full mb-5">
