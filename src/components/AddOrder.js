@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 
 export const AddOrder = () => {
   let history = useHistory();
-
 
   const [customerId, setCustId] = useState("");
   const [productId, setProductId] = useState("");
@@ -13,7 +11,46 @@ export const AddOrder = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    history.push("/");
+    const addOrderAPI = async () => {
+      try {
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        let requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({
+            customer_id: customerId,
+            status: status,
+            quantity: quantity,
+            product_id: productId,
+          }),
+          redirect: "follow",
+        };
+        const res = await fetch(
+          `https://rest-api-orderlist.herokuapp.com/api/orders/add`,
+          requestOptions
+        );
+        const dataR = await res.json();
+        switch (res["status"]) {
+          case 200:
+            if (dataR) {
+                alert("Success")
+              console.log("Add Order Res ", JSON.stringify(dataR));
+              history.push("/");
+            }
+            break;
+          case 500:
+            console.log("status ", dataR["status"]);
+            console.log("message ", dataR["message"]);
+            break;
+          default:
+            console.log("Add Order default ", JSON.stringify(dataR));
+        }
+      } catch (e) {
+        console.log(" error Catch message ", e.message);
+      }
+    };
+    addOrderAPI();
   };
 
   return (
