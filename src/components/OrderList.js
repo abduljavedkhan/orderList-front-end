@@ -1,72 +1,11 @@
-import { useState, useEffect } from "react";
+import {  useContext } from "react";
 
 import { Link } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
 
 export const OrderList = () => {
-  const [orderListRes, setOrderListRes] = useState([]);
 
-  const orders = [
-    {
-      order_id: 210,
-      line_total: 40,
-      quantity: 7,
-      customer_id: 54321,
-      status: "processing",
-      product_id: "T456789",
-      created_on: "2021-06-30T03:14:59.000Z",
-      updated_on: "2021-06-30T03:14:59.000Z",
-    },
-    {
-      order_id: 211,
-      line_total: 80,
-      quantity: 5,
-      customer_id: 54321,
-      status: "processing",
-      product_id: "A224569",
-      created_on: "2021-06-30T03:15:29.000Z",
-      updated_on: "2021-06-30T03:15:29.000Z",
-    },
-    {
-      order_id: 212,
-      line_total: 100,
-      quantity: 5,
-      customer_id: 54321,
-      status: "processing",
-      product_id: "A224568",
-      created_on: "2021-06-30T03:15:50.000Z",
-      updated_on: "2021-06-30T03:15:50.000Z",
-    },
-    {
-      order_id: 213,
-      line_total: 100,
-      quantity: 4,
-      customer_id: 54321,
-      status: "processing",
-      product_id: "A224567",
-      created_on: "2021-06-30T03:16:17.000Z",
-      updated_on: "2021-06-30T03:16:17.000Z",
-    },
-    {
-      order_id: 214,
-      line_total: 20,
-      quantity: 2,
-      customer_id: 54321,
-      status: "processing",
-      product_id: "B789456",
-      created_on: "2021-06-30T03:16:45.000Z",
-      updated_on: "2021-06-30T03:16:45.000Z",
-    },
-    {
-      order_id: 215,
-      line_total: 30,
-      quantity: 4,
-      customer_id: 54321,
-      status: "processing",
-      product_id: "P1456789",
-      created_on: "2021-06-30T03:27:33.000Z",
-      updated_on: "2021-06-30T03:27:33.000Z",
-    },
-  ];
+  const {orderListRes, setOrderListRes } = useContext(AppContext)
 
   const OrderListAPI = async () => {
     try {
@@ -110,7 +49,7 @@ export const OrderList = () => {
       </button>
       {orderListRes && orderListRes.length > 0 ? (
         <>
-          {orders.map((order) => (
+          {orderListRes.map((order) => (
             <div
               className="flex items-center bg-gray-100 mb-10 shadow"
               key={order.order_id}
@@ -148,7 +87,7 @@ export const OrderList = () => {
                 </p>
               </div>
               <div className="flex-auto text-right px-4 py-2 m-2">
-                <Link to={`/edit/${order.id}`} title="update Order Status">
+                <Link to={`/edit/${order.order_id}`} title="update Status">
                   <div className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold mr-3 py-2 px-4 rounded-full inline-flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

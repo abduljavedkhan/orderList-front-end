@@ -1,96 +1,81 @@
-import React, { useState,  useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-
-const orders = [
-    {
-        "id": 4633499533378,
-        "name": "Test 1",
-        "quantity": 3,
-        "product_id": 4460755157058,
-        "orderId": 7,
-        "orderDate": "2020-04-14T06:15:23.000Z"
-    },
-    {
-        "id": 4633579421762,
-        "name": "Test 2",
-        "quantity": 1,
-        "product_id": 4467615531074,
-        "orderId": 6,
-        "orderDate": "2020-04-14T06:42:47.000Z"
-    },
-    {
-        "id": 4633579454530,
-        "name": "Test 1",
-        "quantity": 2,
-        "product_id": 4460755157058,
-        "orderId": 6,
-        "orderDate": "2020-04-14T06:42:47.000Z"
-    },
-    {
-        "id": 4684687114306,
-        "name": "Test 4",
-        "quantity": 4,
-        "product_id": 4467830194242,
-        "orderId": 3,
-        "orderDate": "2020-04-24T10:07:57.000Z"
-    },
-    {
-        "id": 4684738265154,
-        "name": "Test 1",
-        "quantity": 2,
-        "product_id": 4460755157058,
-        "orderId": 3,
-        "orderDate": "2020-04-24T10:07:57.000Z"
-    },
-    {
-        "id": 4684890800194,
-        "name": "Test 6",
-        "quantity": 100,
-        "product_id": 4455579123778,
-        "orderId": 2,
-        "orderDate": "2020-04-24T11:41:40.000Z"
-    },
-    {
-        "id": 4684890832962,
-        "name": "Test 7",
-        "quantity": 60,
-        "product_id": 4455579025474,
-        "orderId": 2,
-        "orderDate": "2020-04-24T11:41:40.000Z"
-    }
-] 
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory, Link } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
 
 export const UpdateOrder = (route) => {
+  const { orderListRes } = useContext(AppContext);
+
   let history = useHistory();
-  
+
   const [selectedOrder, setSelectedOrder] = useState({
-    id: null,
-    name: "",
+    order_id: null,
     product_id: "",
+    quantity: "",
     orderDate: "",
+    status: "",
   });
 
   const currentOrderId = route.match.params.id;
-
   useEffect(() => {
     const orderId = currentOrderId;
-     const selectedOrder = orders.find(
-       (currentOrderTraversal) => currentOrderTraversal.id === parseInt(orderId)
-     );
+    const selectedOrder = orderListRes.find(
+      (currentOrderTraversal) =>
+        currentOrderTraversal.order_id === parseInt(orderId)
+    );
     setSelectedOrder(selectedOrder);
-  }, [currentOrderId, orders]);
+  }, [currentOrderId, orderListRes]);
+
+  const handleOnStatusChange = (userKey, newValue) =>
+    setSelectedOrder({ ...selectedOrder, [userKey]: newValue });
+
+  const handleOnQuantityChange = (userKey, newValue) =>
+    setSelectedOrder({ ...selectedOrder, [userKey]: newValue });
+
+  if (!selectedOrder || !selectedOrder.order_id) {
+    return <div>Invalid Order ID.</div>;
+  }
 
   const onSubmit = (e) => {
     e.preventDefault();
-    history.push("/");
+    const updateOrderAPI = async () => {
+      try {
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        let requestOptions = {
+          method: "PATCH",
+          headers: myHeaders,
+          body: JSON.stringify({
+            status: selectedOrder.status,
+            quantity: selectedOrder.quantity,
+          }),
+          redirect: "follow",
+        };
+        const res = await fetch(
+          `https://rest-api-orderlist.herokuapp.com/api/orders/` +
+            currentOrderId,
+          requestOptions
+        );
+        const dataR = await res.json();
+        switch (res["status"]) {
+          case 200:
+            if (dataR) {
+
+              history.push("/");
+            }
+            break;
+          case 500:
+            console.log("status ", dataR["status"]);
+            console.log("message ", dataR["message"]);
+            break;
+          default:
+            console.log("Order Update result default ", JSON.stringify(dataR));
+        }
+      } catch (e) {
+        console.log("Order update method: error Catch message ", e.message);
+      }
+    };
+    updateOrderAPI();
   };
-
-  const handleOnChange = (userKey, newValue) =>
-    setSelectedOrder({ ...selectedOrder, [userKey]: newValue });
-
-  if (!selectedOrder || !selectedOrder.id) {
-    return <div>Invalid Order ID.</div>;
-  }
 
   return (
     <>
@@ -106,14 +91,31 @@ export const UpdateOrder = (route) => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline"
               value={selectedOrder.status}
-              onChange={(e) => handleOnChange("status", e.target.value)}
+              onChange={(e) => handleOnStatusChange("status", e.target.value)}
               type="text"
               placeholder="Enter Status"
             />
           </div>
+          <div className="w-full  mb-5">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="quantity"
+            >
+              Quantity
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline"
+              value={selectedOrder.quantity}
+              onChange={(e) =>
+                handleOnQuantityChange("quantity", e.target.value)
+              }
+              type="number"
+              placeholder="Enter Quantity"
+            />
+          </div>
           <div className="flex items-center justify-between">
             <button className="block mt-5 bg-green-400 w-full hover:bg-green-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline">
-              Edit Order
+              Update Order
             </button>
           </div>
           <div className="text-center mt-4 text-gray-500">
